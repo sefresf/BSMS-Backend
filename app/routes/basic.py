@@ -471,3 +471,24 @@ def supplier_select():
             "code": 400,
             "msg": f"Fail.Reason:{str(e)}",
         }, 201
+    
+# ========== 供货信息视图接口 ==========
+@basic_bp.route('/supply-info/select', methods=['GET'])
+def supply_info_select():
+    try:
+        rows = db.session.execute(text("""
+            SELECT supplier_id, supplier_name, isbn, title, author, publisher, supply_price
+            FROM v_supply_info
+        """)).fetchall()
+
+        return {
+            "code": 200,
+            "msg": "Success.",
+            "data": {
+                "count": len(rows),
+                "list": [dict(row._mapping) for row in rows]
+            }
+        }, 200
+    except Exception as e:
+        return {"code": 400, "msg": f"Fail.Reason:{e}"}, 201
+    
