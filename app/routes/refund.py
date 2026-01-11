@@ -6,12 +6,14 @@ import random, time
 from datetime import datetime
 from app.db import db
 from app.models import VReturnRecords
+from app.routes.auth import token_required
 
 refund_bp = Blueprint('refund', __name__)
 
 
 # ========== 退货订单视图接口 ==========
 @refund_bp.route('/select', methods=['GET'])
+@token_required
 def refund_select():
     """退货订单视图查询"""
     try:
@@ -156,6 +158,7 @@ def generate_return_id():
 
 
 @refund_bp.route('/insert', methods=['POST'])
+@token_required
 def refund_insert():
     """登记退货 - 调用存储过程 proc_return_insert"""
     try:

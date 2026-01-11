@@ -1,5 +1,6 @@
 from flask import Blueprint, request
 from app.models import Book, Supplier, SupplyInfo, VSupplyInfo, Stock
+from app.routes.auth import token_required
 from app.db import db
 from sqlalchemy import text, cast
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
@@ -34,6 +35,7 @@ def test_db_connection():
 
 
 @basic_bp.route('/book/insert', methods=['POST'])
+@token_required
 def book_insert():
     try:
         data = request.json
@@ -78,6 +80,7 @@ def book_insert():
 
 
 @basic_bp.route('/book/update', methods=['POST'])
+@token_required
 def book_update():
     """修改图书"""
     try:
@@ -117,6 +120,7 @@ def book_update():
 
 
 @basic_bp.route('/book/delete', methods=['POST'])
+@token_required
 def book_delete():
     """删除图书"""
     try:
@@ -145,6 +149,7 @@ def book_delete():
 # ========== 供应商相关接口 ==========
 
 @basic_bp.route('/supplier/insert', methods=['POST'])
+@token_required
 def supplier_insert():
     """添加供应商"""
     try:
@@ -168,6 +173,7 @@ def supplier_insert():
 
 
 @basic_bp.route('/supplier/update', methods=['POST'])
+@token_required
 def supplier_update():
     """修改供应商"""
     try:
@@ -201,6 +207,7 @@ def supplier_update():
 
 
 @basic_bp.route('/supplier/delete', methods=['POST'])
+@token_required
 def supplier_delete():
     """删除供应商"""
     try:
@@ -233,6 +240,7 @@ def supplier_delete():
 # ========== 供货报价相关接口 ==========
 
 @basic_bp.route('/supply-info/insert', methods=['POST'])
+@token_required
 def supply_info_insert():
     """添加供货报价"""
     try:
@@ -271,6 +279,7 @@ def supply_info_insert():
 
 
 @basic_bp.route('/supply-info/update', methods=['POST'])
+@token_required
 def supply_info_update():
     """修改供货报价"""
     try:
@@ -309,6 +318,7 @@ def supply_info_update():
 
 
 @basic_bp.route('/supply-info/delete', methods=['POST'])
+@token_required
 def supply_info_delete():
     """删除供货报价"""
     try:
@@ -344,6 +354,7 @@ def supply_info_delete():
 
 
 @basic_bp.route('/book/select', methods=['GET'])
+@token_required
 def book_select():
     """图书基础信息表 - 支持分页、排序和搜索"""
     try:
@@ -420,6 +431,7 @@ def book_select():
 
 
 @basic_bp.route('/supplier/select', methods=['GET'])
+@token_required
 def supplier_select():
     """供应商表 - 支持分页、排序和搜索"""
     try:
@@ -486,6 +498,7 @@ def supplier_select():
     
 # ========== 供货信息视图接口 ==========
 @basic_bp.route('/supply-info/select', methods=['GET'])
+@token_required
 def supply_info_view_select():
     """供货信息视图 - 使用VSupplyInfo视图模型"""
     try:

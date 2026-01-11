@@ -3,6 +3,7 @@ from sqlalchemy import text
 from datetime import datetime
 from app.db import db
 from app.models import VInventoryShortageWarning, VBookInventory
+from app.routes.auth import token_required
 
 statistic_bp = Blueprint('statistic', __name__)
 
@@ -14,6 +15,7 @@ def statistic_hello():
 
 
 @statistic_bp.route('/stock/select', methods=['GET'])
+@token_required
 def stock_select():
     """图书库存视图查询 - 连接图书基础信息表、库存表"""
     try:
@@ -91,6 +93,7 @@ def stock_select():
 
 
 @statistic_bp.route('/stock/shortage', methods=['GET'])
+@token_required
 def stock_shortage():
     """库存紧张预警视图 - 获取急需补货的图书列表"""
     try:
@@ -155,6 +158,7 @@ def stock_shortage():
 
 
 @statistic_bp.route('/sales/rank/daily', methods=['GET'])
+@token_required
 def daily_sales_rank():
     """图书销售日榜"""
     try:
@@ -241,6 +245,7 @@ def daily_sales_rank():
 
 
 @statistic_bp.route('/sales/rank/monthly', methods=['GET'])
+@token_required
 def monthly_sales_rank():
     """图书销售月榜"""
     try:

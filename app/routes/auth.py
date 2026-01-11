@@ -5,7 +5,34 @@ from datetime import datetime, timedelta
 import hashlib
 import secrets
 
+from functools import wraps
+
 auth_bp = Blueprint('auth', __name__)
+
+
+def token_required(f):
+    """验证token有效性的装饰器"""
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = get_token_from_header()
+        if not token:
+            return {
+                "code": 401,
+                "msg": "未提供认证令牌",
+                "data": {}
+            }, 401
+        
+        user = get_user_by_token(token)
+        if not user:
+            return {
+                "code": 401,
+                "msg": "无效或已过期的令牌",
+                "data": {}
+            }, 401
+
+        return f(*args, **kwargs)
+    
+    return decorated
 
 
 def generate_token():
@@ -299,42 +326,14 @@ def signup():
 # ========== 权限验证接口 ==========
 
 @auth_bp.route('/verification', methods=['POST'])
+@token_required
 def verification():
     """验证权限/验证token有效性"""
     try:
-        # 从请求头获取token
-        token = get_token_from_header()
-
-        if not token:
-            return {
-                "code": 401,
-                "msg": "未提供认证token",
-                "data": {}
-            }, 401
-
-        # 验证token
-        user = get_user_by_token(token)
-
-        if not user:
-            return {
-                "code": 401,
-                "msg": "token无效或已过期",
-                "data": {}
-            }, 401
-
-        # 获取用户角色信息
-        role = Role.query.filter_by(role_id=user.role_id).first()
-
         return {
             "code": 200,
             "msg": "验证成功",
-            "data": {
-                "user_id": str(user.user_id),
-                "username": user.username,
-                "role_id": user.role_id,
-                "role_name": role.role_name if role else "",
-                "is_authenticated": True
-            }
+            "data": {}
         }, 200
 
     except Exception as e:

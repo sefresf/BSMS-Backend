@@ -7,6 +7,7 @@ import time
 import random
 from datetime import datetime
 from app.models import VSalesRecords
+from app.routes.auth import token_required
 
 order_bp = Blueprint('order', __name__)
 
@@ -18,6 +19,7 @@ def order_hello():
 
 
 @order_bp.route('/select', methods=['GET'])
+@token_required
 def order_select():
     """销售订单视图查询 - 连接销售订单表、销售明细表、图书信息表、系统用户表"""
     try:
@@ -144,6 +146,7 @@ def order_select():
 
 
 @order_bp.route('/insert', methods=['POST'])
+@token_required
 def order_insert():
     """登记销售 - 调用存储过程 proc_order_insert"""
     try:
