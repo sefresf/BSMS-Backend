@@ -1,5 +1,6 @@
 from flask import Blueprint, request
 from app.models import VPurchaseRecord
+from app.routes.auth import token_required
 from app.db import db
 from sqlalchemy import text, cast, String
 from datetime import datetime
@@ -15,6 +16,7 @@ def purchase_hello():
    
 # ========== 进货记录视图接口 ==========
 @purchase_bp.route('/select', methods=['GET'])
+@token_required
 def purchase_select():
     """进货记录视图查询"""
     try:
@@ -117,6 +119,7 @@ def purchase_select():
 
 # ========= 登记进货接口 ==========
 @purchase_bp.route('/insert', methods=['POST'])
+@token_required
 def purchase_insert():
     """登记进货"""
     try:
