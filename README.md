@@ -109,18 +109,17 @@ pip install -r requirements.txt
 4. **配置环境变量**
 创建 `.env` 文件并配置数据库连接：
 ```
-FLASK_ENV=development
-FLASK_APP=run.py
-SQLALCHEMY_DATABASE_URI=mysql+pymysql://user:password@localhost:3306/bsms
+# 数据库配置
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=请输入密码
+DB_NAME=book_sales_db
+
 ```
 
 5. **初始化数据库**
-```bash
-flask shell
->>> from app.db import db
->>> db.create_all()
->>> exit()
-```
+依次运行book_sales_init.sql和data_generate.sql
 
 6. **运行应用**
 ```bash
